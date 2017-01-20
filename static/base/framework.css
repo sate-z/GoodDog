@@ -1,0 +1,11 @@
+.nav-self-color {
+    background-color: rgba(35, 35, 37, 0.97);
+}
+
+.navbar a{
+    color:white;
+}
+
+.change-line{
+    word-wrap:break-word;
+}

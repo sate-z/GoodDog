@@ -1,0 +1,138 @@
+{% extends 'cmdhand/cmdhand.html' %}
+
+{% block custom-rightside %}
+
+    <div class="row clearfix">
+
+        <div class="col-md-2" style="background-color: #f6fffd">
+            <span>{{ head_name }}</span>
+            <hr>
+
+
+            <form class="form-horizontal" role="form">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" id="choose_all"> 全选
+                    </label>
+                </div>
+                {% for host in host_list %}
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="host_checkbox" value="{{ host.ip_public }}"> {{ host.custom_name }}
+                        </label>
+                    </div>
+                {% endfor %}
+                <hr>
+                <button type="button" class="btn btn-info btn-block btn-sm" onclick="SubmitChooseHost()">确认</button>
+            </form>
+
+
+        </div>
+
+
+        <div class="col-md-9 " >
+            <div class="panel panel-success">
+                <div class="panel-heading">
+                    <h3 class="panel-title">执行命令</h3>
+                </div>
+                <div class="panel-body" id="run_cmd">
+
+                    <!-- 执行命令的提交表单 start-->
+                    <form class="form-horizontal" role="form" method="post">
+                        {% csrf_token %}
+
+                         <div class="form-group">
+                            <label class="col-sm-1 control-label">选中机器</label>
+                            <div class="col-sm-6">
+                                <textarea disabled class="form-control" rows="3" id="show-host-list"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="inputUsername" class="col-sm-1 control-label">用户名</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" id="inputUsername" placeholder="用户名">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputPassword3" class="col-sm-1 control-label">密码</label>
+                            <div class="col-sm-6">
+                                <input type="password" class="form-control" id="inputPassword3" placeholder="密码">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="inputCmd" class="col-sm-1 control-label">命令</label>
+                            <div class="col-sm-6">
+                                <textarea class="form-control" rows="3" id="cmd"></textarea>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <div class="col-sm-offset-1 col-sm-6">
+                                <button type="submit" class="btn btn-default" id="cmd_running">执行</button>
+                            </div>
+                        </div>
+                    </form>
+                    <!-- 执行命令的提交表单 end-->
+
+
+                </div>
+            </div>
+
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">执行结果</h3>
+                </div>
+                <div class="panel-body">
+                    展示结果
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+{% endblock custom-rightside %}
+
+{% block custom_js %}
+    <script>
+
+        $('#choose_all').click(function () {    // 全选和取消全选
+            console.log(this.checked);
+            $("input[type='checkbox']").attr("checked", this.checked)
+        });
+
+        var choose_host = [];
+
+        function SubmitChooseHost() {
+            $('input[type="checkbox"]:checked').each(function () {  // 遍历每个选中的 checkbox
+                if($(this).val() !== 'on'){
+                    choose_host.push($(this).val());
+                }else {
+                    null
+                }
+                    //  将选中的机器 IP 放到 choose_host 数组中
+                $(this).prop('checked', false);  // 取消选中
+            });
+
+            console.log(choose_host);
+            $('#show-host-list').html(choose_host + ',');
+            choose_host = '';
+        }
+
+        $('#cmd_running').click(function () {
+            var data_list = {};
+            data_list['host_list'] = $('#show-host-list').text();
+            data_list['login_user'] = $('#inputUsername').val();
+            data_list['login_pwd'] = $('#inputPassword3').val();
+            data_list['cmd'] = $('#cmd').val();
+            data_list["csrfmiddlewaretoken"] = $('input[name="csrfmiddlewaretoken"]').attr('value');
+            $.post('{% url "cmdhand:cmd_handle" %}', data_list, function(callback, status_code){
+                console.log(callback, status_code)
+             })
+
+        })
+    </script>
+{% endblock custom_js %}

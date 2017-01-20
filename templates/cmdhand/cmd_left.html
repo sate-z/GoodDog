@@ -1,0 +1,12 @@
+
+    <ul class="nav nav-sidebar">
+        <li class="disabled"><a href="#"><strong>所在组</strong></a></li>
+        {% for group in request.user.groupinfo_set.select_related %}
+            <li><a href="{% url 'cmdhand:ecs_list' %}?select_gid={{ group.id }}&type=grouphost">{{ group.group_name }}</a></li>
+        {% endfor %}
+    </ul>
+
+    <ul class="nav nav-sidebar">
+        <li class="disabled"><a href="#"><strong>独立主机</strong></a></li>
+        <li><a href="{% url 'cmdhand:ecs_list' %}?type=bindhost">绑定主机</a></li>
+    </ul>

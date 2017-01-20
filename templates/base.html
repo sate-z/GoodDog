@@ -1,0 +1,81 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>GoodDog</title>
+        <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+        <!-- Bootstrap -->
+        <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+        <link href="{% static 'bootstrap/css/dashboard.css' %}" rel="stylesheet">
+        <!-- framework self -->
+        <link href="{% static 'base/framework.css' %}" rel="stylesheet">
+        {% block custom_css %} {% endblock custom_css %}
+    </head>
+    <body>
+        <!-- 导航栏 -->
+
+        <nav class="navbar navbar-inverse navbar-fixed-top nav-self-color" role="navigation">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="/">GoodDog</a>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li><a href="/">仪表盘</a></li>
+                        <li><a href="{% url 'hostbody:hostbody' %}">主机</a></li>
+                        <li><a href="{% url 'cmdhand:cmdhand' %}">批量命令</a></li>
+                        <li><a href="#">监控</a></li>
+                        <li><a href="#">审计</a></li>
+                        <li><a href="#">用户管理</a></li>
+                    </ul>
+
+                    <ul class="nav navbar-nav navbar-right">
+                        {% if not request.user.is_authenticated %}
+                        <li>
+                            <a href="{% url 'login' %}">Login</a>
+                        </li>
+                        {% else %}
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">{{ request.user.name }}<span class="caret"></span></a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href="#">个人信息</a></li>
+                                <li class="divider"></li>
+                                <li><a href="{% url 'logout' %}">Logout</a></li>
+                            </ul>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- body -->
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-3 col-md-2 sidebar">
+                    {% block custom-leftside %} {% endblock custom-leftside %}
+                </div>
+                <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+                    {% block custom-rightside %} {% endblock custom-rightside %}
+                </div>
+            </div>
+        </div>
+
+        <!-- jQuery -->
+        <script src="{% static 'bootstrap/js/jquery-3.1.1.min.js' %}"></script>
+        <!-- bootstrap js　-->
+        <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+        {% block custom_js %} {% endblock custom_js %}
+
+    </body>
+</html>

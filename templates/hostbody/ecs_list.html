@@ -1,0 +1,80 @@
+{% extends 'hostbody/hostbody.html' %}
+
+{% block custom-rightside %}
+    <div class="container">
+        <div class="row clearfix">
+            <div class="col-md-12 column">
+                <div class="page-header">
+                    <h1>
+                        {{ head_name }}
+                    </h1>
+                </div>
+
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>编号</th>
+                        <th>实例ID</th>
+                        <th>名称</th>
+                        <th>可用区</th>
+                        <th>公网IP</th>
+                        <th>内网IP</th>
+                        <th>Cpu</th>
+                        <th>内存</th>
+                        <th>带宽</th>
+                        <th>过期时间</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for host in host_list %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ host.instance_id }}</td>
+                        <td>{{ host.custom_name }}</td>
+                        <td>{{ host.region_part }}</td>
+                        <td>{{ host.ip_public }}</td>
+                        <td>{{ host.ip_private }}</td>
+                        <td>{{ host.cpu_num }}</td>
+                        <td>{{ host.memory }}</td>
+                        <td>{{ host.bandwidth }}</td>
+                        <td>{{ host.expired_time }}</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+                <br>
+                <div class="row clearfix">
+                    <div class="col-md-8 column">
+                    </div>
+                    <div class="col-md-4 column">
+
+                        <div class="btn-group">
+                            <button class="btn btn-default">Action</button> <button data-toggle="dropdown" class="btn btn-default dropdown-toggle"><span class="caret"></span></button>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="{% url 'hostbody:update_host' %}">更新</a>
+                                </li>
+                                <li class="disabled">
+                                    <a href="#">另一操作</a>
+                                </li>
+                                <li class="divider">
+                                </li>
+                                <li>
+                                    <a href="#">其它</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <span style="color: red;">{{ error_log }}</span>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+    </div>
+
+
+
+{% endblock custom-rightside %}
