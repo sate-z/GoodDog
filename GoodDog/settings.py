@@ -131,7 +131,7 @@ LOGIN_URL = '/login/'
 
 
 # ali AK
-AccessKeyId = 'LTAIibCw5AeNZtwS'
-AccessKeySecret = '9MWiWxedTfmQbOhvDeFB3y4Q2OcUM2'
+AccessKeyId = '*****'
+AccessKeySecret = '******'
 Region = 'cn-hangzhou'
 PageSize = '20'
